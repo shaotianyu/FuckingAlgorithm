@@ -1,0 +1,15 @@
+{
+  "name": "cloneDeep",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "keywords": [],
+  "author": "shaotianyu",
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/plugin-external-helpers": "^7.8.3",
+    "@babel/preset-env": "^7.8.7",
+    "rollup": "^2.0.6",
+    "rollup-plugin-babel": "^4.4.0"
+  }
+}
