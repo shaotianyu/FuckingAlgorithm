@@ -152,6 +152,7 @@ function baseClone(value, bitmask, customizer, key, object, stack) {
     }
   }
   // 检查循环引用并返回相应的克隆
+  debugger
   stack || (stack = new Stack)
   const stacked = stack.get(value)
   if (stacked) {
