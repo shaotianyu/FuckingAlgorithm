@@ -170,7 +170,7 @@ function initCloneObject(object) {
 
 ```
 
-##### 4.1、使用栈来维护对象的拷贝
+##### 4.1、使用数据缓存来维护对象的拷贝
 
 
 ```js
@@ -182,9 +182,118 @@ return stacked
 // 这里的result是上面一系列代码生成的初始化对象，可以暂时把它理解为一个包含原型继承关系的空对象
 stack.set(value, result)
 ```
+上面代码建立了`Stack`，这是个数据管理接口，将子对象的值作为`key-value`一对一的形式缓存起来，其内部详细的缓存行为大概细分为`HashCache`、`MapCache`和`ListCache`，为什么使用三种对象缓存策略？
 
-上面代码建立了`Stack`，这是个数据管理接口，其内部详细的缓存行为大概细分为HashCache、MapCache和ListCache，为什么使用三种缓存方式，这三种方式做了一个降级处理，优先使用级：`HashCache > MapCache > ListCache`,在较大的数据量时，对象的存取性能会依次降低。
+`HashCache`本质上是用对象的存储方式，可是会有个限制，`js`中的对象存储，本质上是键值对的集合（Hash 结构），只能限制使用`字符串/Symbol`当作键，这给它的使用带来了很大的限制。而`Map`提供了一种更完善的 `Hash `结构实现，它的`key`可以是各种类型，所以在`key`为`Object/Array`等类型的场景下，lodash内部使用了`MapCache`。
 
+###### 4.1.1、Stack
+
+```js
+class Stack{
+    ...
+    const LARGE_ARRAY_SIZE = 200
+    // Stack的set方法
+    set(key, value) {
+        let data = this.__data__
+        if (data instanceof ListCache) {
+          const pairs = data.__data__
+          if (pairs.length < LARGE_ARRAY_SIZE - 1) {
+            pairs.push([key, value])
+            this.size = ++data.size
+            return this
+          }
+          data = this.__data__ = new MapCache(pairs)
+        }
+        data.set(key, value)
+        this.size = data.size
+        return this
+    }
+    ...
+}
+```
+由`Stack`的入口逻辑可以看到，当缓存内部`__data__`的长度超出`LARGE_ARRAY_SIZE`限额时，构造了`MapCache`的实例，并采用了`MapCache`的内部`set`方法，否则使用`ListCache`。
+
+###### 4.1.2、LstCache
+
+`ListCache`其实是一个二维数组类型的数据结构
+
+```js
+class ListCache {
+    ...
+    // ListCache中set方法，实现了二维数组式存储
+    set(key, value) {
+        const data = this.__data__
+        const index = assocIndexOf(data, key)
+    
+        if (index < 0) {
+          ++this.size
+          data.push([key, value])
+        } else {
+          data[index][1] = value
+        }
+        return this
+    }
+    ...
+}
+```
+
+###### 4.1.3、MapCache
+
+下面是`MapCache`的存储主要实现：
+
+```js
+// 初始化数据结构
+this.__data__ = {
+  'hash': new Hash,
+  'map': new Map,
+  'string': new Hash
+}
+
+set(key, value) {
+    const data = getMapData(this, key)
+    const size = data.size
+    data.set(key, value)
+    this.size += data.size == size ? 0 : 1
+    return this
+}
+
+// 根据key的类型来判断该数据的存储方式，Hash或者Map
+function getMapData({ __data__ }, key) {
+  const data = __data__
+  return isKeyable(key)
+    ? data[typeof key === 'string' ? 'string' : 'hash']
+    : data.map
+}
+
+// 检查 value 是否适合用作唯一对象键
+function isKeyable(value) {
+  const type = typeof value
+  return (type === 'string' || type === 'number' || type === 'symbol' || type === 'boolean')
+    ? (value !== '__proto__')
+    : (value === null)
+}
+```
+
+###### 4.1.4、HashCache
+
+有下面的代码可以看出，`Hash` 其实是用对象形式做缓存
+
+
+```js
+const HASH_UNDEFINED = '__lodash_hash_undefined__'
+
+this.__data__ = Object.create(null)
+
+set(key, value) {
+    const data = this.__data__
+    this.size += this.has(key) ? 0 : 1
+    data[key] = value === undefined ? HASH_UNDEFINED : value
+    return this
+}
+```
+
+
+##### 4.2、循环引用问题
 
 ```js
 const loopObject = { a: 1 }
@@ -195,7 +304,7 @@ loopObject.b = loopObject
 由于这个特殊情况的存在，在使用`JSON.parse(JSON.stringify(loopObject))`时会出现内存溢出的问题。
 
 
-使用缓存的另一个好处是，能够处理对象中循环引用的情况。在遍历到循环引用对象时，缓存策略会从`ceche`中利用对应的`key`找出对应的`value`，如果对应的引用已经拷贝了，就不需要在再次执行拷贝了
+使用缓存的另一个好处是，能够处理对象中循环引用的情况。在遍历到循环引用对象时，缓存策略会从`ceche`中利用对应的`key`找出对应的`value`，如果对应的引用已经拷贝了，就不需要在再次执行拷贝了，避免了溢出的问题。
 
 #### 5、递归拷贝
 
