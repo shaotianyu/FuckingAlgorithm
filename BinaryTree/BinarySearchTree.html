@@ -1,0 +1,55 @@
+<script>
+
+class Node {
+  constructor (value, left = null, right = null) {
+    this.value = value
+    this.left = left
+    this.right = right
+  }
+}
+
+class BST {
+  constructor () {
+    this._root = null
+  }
+
+  insert (data) {
+    const node = new Node(data, null, null)
+    if (this._root === null) {
+      this._root = node
+    } else {
+      let current = this._root
+      while (true) {
+        if (current.value > data) {
+          if (current.left === null) {
+            current.left = node
+            break
+          }
+          current = current.left
+        } else {
+          if (current.right === null) {
+            current.right = node
+            break
+          }
+          current = current.right
+        }
+      }
+    }
+  }
+}
+
+const bst = new BST
+
+bst.insert(0)
+bst.insert(3)
+bst.insert(-3)
+bst.insert(-2)
+bst.insert(5)
+bst.insert(29)
+bst.insert(-1)
+bst.insert(12)
+bst.insert(2)
+
+console.log(bst)
+
+</script>

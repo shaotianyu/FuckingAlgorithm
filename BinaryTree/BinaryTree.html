@@ -1,0 +1,97 @@
+<script>
+
+class Node {
+
+  constructor (val, parent = null, left = null, right = null) {
+    this.val = val
+    this.parent = null
+    this.left = left
+    this.right = right
+  }
+
+  insertNodeAsLeftC (newNode) {
+    this.left = newNode
+    newNode.parent = this
+  }
+
+  insertNodeAsRightC (newNode) {
+    this.right = newNode
+    newNode.parent = this
+  }
+}
+
+class BinaryTree {
+
+  constructor (root) {
+    this._root = root
+    this._size = 0
+  }
+
+  // 插入左节点
+  insertAsLeftChild (target, newNode) {
+    if (!target.left) {
+      target.insertNodeAsLeftC(newNode)
+      this._size++
+    }
+  }
+
+  // 插入左节点
+  insertAsRightChild (target, newNode) {
+    if (!target.right) {
+      target.insertNodeAsRightC(newNode)
+      this._size++
+    }
+  }
+  
+  actionInOrder (node) {
+    if (node) {
+      this.actionInOrder(node.left)
+      console.log(node, '-----inorder')
+      this.actionInOrder(node.right)
+    }
+  }
+
+  actionPreOrder (node) {
+    if (node) {
+      console.log(node, '-----preorder')
+      this.actionPreOrder(node.left)
+      this.actionPreOrder(node.right)
+    }
+  }
+
+  actionPostOrder (node) {
+    if (node) {
+      this.actionPostOrder(node.left)
+      this.actionPostOrder(node.right)
+      console.log(node, '-----postorder')
+    }
+  }
+
+}
+
+// 初始化
+const node1 = new Node(1)
+const node2 = new Node(2)
+const node3 = new Node(3)
+const node4 = new Node(4)
+const node5 = new Node(5)
+const node6 = new Node(6)
+
+const tree = new BinaryTree(node1)
+
+tree.insertAsLeftChild(node1, node2)
+tree.insertAsRightChild(node1, node3)
+tree.insertAsLeftChild(node2, node4)
+tree.insertAsRightChild(node2, node6)
+tree.insertAsRightChild(node3, node5)
+
+// console.log(tree)
+
+// 中序遍历
+tree.actionInOrder(tree._root)
+// 前序遍历
+tree.actionPreOrder(tree._root)
+// 后序遍历
+tree.actionPostOrder(tree._root)
+
+</script>
