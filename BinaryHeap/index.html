@@ -1,0 +1,74 @@
+<script>
+
+class BinaryHeap {
+  
+  constructor (arr) {
+    this.list = []
+    if (Array.isArray(arr)) {
+      arr.forEach(this.insert.bind(this))
+    }
+  }
+
+  insert (val) {
+    const { list, swap } = this
+    list.push(val)
+    let point = list.length - 1
+    while (point) {
+      const parent = Math.floor((point - 1) / 2)
+      if (list[point] <= list[parent]) {
+        break
+      }
+      this.swap(point, parent)
+      point = parent
+    }
+  }
+
+  deleteTop () {
+    const { list } = this
+    if (!list.length) return null
+    this.swap(0, list.length - 1)
+    const res = list.pop()
+    const len = list.length
+    let index = 0
+    let exchange = index * 2 + 1
+    while (exchange < len) {
+      // 取左右child中较大的那个，作为置换
+      let rightChild = index * 2 + 2
+      if (list[exchange] < list[rightChild] && rightChild < len) {
+        exchange = rightChild
+      }
+      if (list[exchange] <= list[index]) {
+        break
+      }
+      this.swap(index, exchange)
+      index = exchange
+      exchange = index * 2 + 1
+    }
+    return res
+  }
+
+  show () {
+    return this.list
+  }
+
+  top () {
+    if (!this.list.length) return null
+    return this.list[0]
+  }
+
+  swap (i, j) {
+    [this.list[i], this.list[j]] = [this.list[j], this.list[i]]
+  }
+
+}
+
+
+const heap = new BinaryHeap([10, 8, 12, 3, -1, -39])
+
+
+// console.log(heap.show());
+// console.log(heap.delete());
+
+// console.log(heap.top());
+
+</script>
