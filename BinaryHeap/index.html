@@ -63,12 +63,22 @@ class BinaryHeap {
 }
 
 
-const heap = new BinaryHeap([10, 8, 12, 3, -1, -39])
+var getLeastNumbers = function(arr, k) {
+   const len = arr.length
+   if (len <= k) return arr
+   const heap = new BinaryHeap(arr.slice(0, k))
+   for (let i = k; i < len; i++) {
+       if (heap.top() > arr[i]) {
+            heap.deleteTop()
+            heap.insert(arr[i])
+       }
+   }
+   return heap.list
+};
 
+const arr = [222, 33, 114, 52, 0, -19, -299, 92, 94, -1]
 
-// console.log(heap.show());
-// console.log(heap.delete());
+console.log(getLeastNumbers(arr, 8));
 
-// console.log(heap.top());
 
 </script>
