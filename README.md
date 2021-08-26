@@ -11,3 +11,4 @@
 * [设计实现双端队列](https://github.com/shaotianyu/FuckingAlgorithm/wiki/%E8%AE%BE%E8%AE%A1%E5%AE%9E%E7%8E%B0%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97)
 * [滑动窗口的最大值](https://github.com/shaotianyu/FuckingAlgorithm/wiki/%E6%BB%91%E5%8A%A8%E7%9A%84%E7%AA%97%E5%8F%A3-%E7%AC%94%E8%AE%B0)
 * [丑数](https://leetcode-cn.com/problems/chou-shu-lcof/solution/zui-xiao-dui-dong-tai-gui-hua-jie-jue-ch-lcoo/)
+* [二叉树的最大深度](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/solution/3chong-fang-fa-duo-chong-xie-fa-di-gui-d-ngmn/)
