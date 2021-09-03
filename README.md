@@ -5,7 +5,7 @@
 ### 数据结构和算法
 * [从零开始，使用JS一步步理解并实现链表](https://juejin.cn/post/6844904106339876871)
 * [前端面试官：请使用二分法搜索旋转数组](https://juejin.cn/post/6844903824050618381)
-* [AC回溯算法](https://leetcode-cn.com/problems/permutations/solution/hui-su-mo-ban-jian-dan-zhi-jie-by-shaoti-o5xq/)
+* [回溯系列，一个模板解决所有问题](https://leetcode-cn.com/problems/permutations/solution/hui-su-mo-ban-jian-dan-zhi-jie-by-shaoti-o5xq/)
 * [new Set()的时间复杂度是O(n)吗?](https://github.com/shaotianyu/FuckingAlgorithm/wiki/new-Set()%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%98%AFO(n)%E5%90%97%3F)
 * [最小的k个数(小顶堆、快排)](https://github.com/shaotianyu/FuckingAlgorithm/wiki/%E6%9C%80%E5%B0%8F%E7%9A%84k%E4%B8%AA%E6%95%B0(%E5%B0%8F%E9%A1%B6%E5%A0%86%E3%80%81%E5%BF%AB%E6%8E%92))
 * [设计实现双端队列](https://github.com/shaotianyu/FuckingAlgorithm/wiki/%E8%AE%BE%E8%AE%A1%E5%AE%9E%E7%8E%B0%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97)
